@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX Chat Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            font-size: 24px;
+        }
+        #commentSection {
+            margin-top: 20px;
+        }
+        .comment {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .comment:last-child {
+            border-bottom: none;
+        }
+        #typedComment {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>AJAX Request with JavaScript</h1>
+    
+    <input type="text" id="comment" placeholder="Type your comment" oninput="showTypedComment()">
+    <button onclick="sendComment()">Add comment</button>
+    
+    <h2>Get comment:</h2>
+    <div id="typedComment"></div>
+    <div id="commentSection"></div>
+
+    <script>
+        // Show the comment being typed
+        function showTypedComment() {
+            var comment = document.getElementById('comment').value;
+            document.getElementById('typedComment').innerText = comment;
+        }
+
+        // Send comment function
+        function sendComment() {
+            var comment = document.getElementById('comment').value;
+            if (comment.trim() === "") {
+                alert("Please type a comment");
+                return;
+            }
+
+            // Simulate an AJAX request using setTimeout
+            setTimeout(function() {
+                // Append the comment to the comment section
+                var commentSection = document.getElementById('commentSection');
+                var newComment = document.createElement('div');
+                newComment.className = 'comment';
+                newComment.innerText = comment;
+                commentSection.appendChild(newComment);
+
+                // Save the comment to local storage
+                var comments = JSON.parse(localStorage.getItem('comments')) || [];
+                comments.push(comment);
+                localStorage.setItem('comments', JSON.stringify(comments));
+
+                // Clear the input and typed comment display
+                document.getElementById('comment').value = "";
+                document.getElementById('typedComment').innerText = "";
+            }, 100); // Simulating a 100ms delay for the AJAX request
+        }
+
+        // Load comments from local storage when the page loads
+        window.onload = function() {
+            var comments = JSON.parse(localStorage.getItem('comments')) || [];
+            var commentSection = document.getElementById('commentSection');
+            comments.forEach(function(comment) {
+                var commentDiv = document.createElement('div');
+                commentDiv.className = 'comment';
+                commentDiv.innerText = comment;
+                commentSection.appendChild(commentDiv);
+            });
+        }
+    </script>
+</body>
+</html>
